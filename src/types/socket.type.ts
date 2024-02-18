@@ -18,6 +18,7 @@ export enum SocketEventType {
 export type OnlineUsersType = {
   username: string;
   nickname: string;
+  uuid: string;
 };
 
 // Socket Chat Message Type

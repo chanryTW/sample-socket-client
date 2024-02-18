@@ -21,6 +21,7 @@ export function login(credentials: LoginPayload) {
         withCredentials: true,
       })
       .then((response) => {
+        localStorage.setItem('token', response.data.token);
         resolve(response.data);
       })
       .catch((err) => {
@@ -31,6 +32,20 @@ export function login(credentials: LoginPayload) {
       });
   });
 }
+
+// 在發送每次請求前手動將 token 添加到 request headers 中
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 type RegisterPayload = {
   username: string;
